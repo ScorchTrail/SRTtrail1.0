@@ -55,3 +55,51 @@
         right: 2.5rem;
     }
 }
+
+/* ── Success submission bubble ────────────────────── */
+.success-bubble {
+    position: fixed;
+    bottom: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #065f46;
+    color: #fff;
+    border: 1px solid #10b981;
+    border-radius: 0.75rem;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 8px 30px rgba(4, 120, 87, 0.4);
+    z-index: 50;
+    pointer-events: none;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    opacity: 1;
+}
+
+.success-bubble--hidden {
+    transform: translateX(-50%) translateY(6rem);
+    opacity: 0;
+}
+
+.success-bubble__icon {
+    font-size: 1.75rem;
+    line-height: 1;
+}
+
+.success-bubble__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.success-bubble__title {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.success-bubble__message {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #a7f3d0;
+}

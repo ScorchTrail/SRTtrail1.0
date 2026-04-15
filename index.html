@@ -182,6 +182,15 @@
 </head>
 <body class="app">
 
+    <!-- Success notification bubble -->
+    <div id="success-bubble" class="success-bubble success-bubble--hidden">
+        <span class="success-bubble__icon">✅</span>
+        <div class="success-bubble__content">
+            <strong class="success-bubble__title">Submission Received!</strong>
+            <p class="success-bubble__message">Thank you! I'll be in touch shortly.</p>
+        </div>
+    </div>
+
     <header class="header">
         <div class="header__grid"></div>
         <div class="header__glow"></div>
@@ -272,10 +281,10 @@
                             <span class="results__action-subtitle">Download .txt file</span>
                         </div>
                     </button>
-                    <button onclick="emailAnswers()" class="results__action-button results__action-button--primary">
+                    <button onclick="submitFinalToAPI(this)" class="results__action-button results__action-button--primary">
                         <span class="results__action-icon">🚀</span>
                         <div class="results__action-copy">
-                            <span class="results__action-title">Send to SRTtrail</span>
+                            <span class="results__action-title">Submit Project Scope</span>
                             <span class="results__action-subtitle results__action-subtitle--light">Let's get started</span>
                         </div>
                     </button>
@@ -550,6 +559,51 @@
             document.getElementById('toast-message').innerText = message;
             toast.classList.remove('toast--hidden');
             setTimeout(() => toast.classList.add('toast--hidden'), 4000);
+        }
+
+        function showSuccessBubble() {
+            const bubble = document.getElementById('success-bubble');
+            bubble.classList.remove('success-bubble--hidden');
+            setTimeout(() => bubble.classList.add('success-bubble--hidden'), 5000);
+        }
+
+        function submitFinalToAPI(btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<span class="results__action-icon">⏳</span><div class="results__action-copy"><span class="results__action-title">Sending...</span></div>';
+
+            const payload = {
+                name: userAnswers.c_name || 'Unknown',
+                email: userAnswers.c_email || 'Unknown',
+                company: userAnswers.c_company || 'Not provided',
+                phone: userAnswers.c_phone || 'Not provided',
+                status: 'Completed Discovery Form',
+                summary: formatAnswers()
+            };
+
+            fetch('https://srttrail-leads.p-vedant7878.workers.dev', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+                keepalive: true
+            })
+            .then(res => {
+                if (res.ok) {
+                    showSuccessBubble();
+                    btn.innerHTML = '<span class="results__action-icon">✅</span><div class="results__action-copy"><span class="results__action-title">Sent!</span></div>';
+                } else {
+                    throw new Error('Server error');
+                }
+            })
+            .catch(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<span class="results__action-icon">🚀</span><div class="results__action-copy"><span class="results__action-title">Submit Project Scope</span><span class="results__action-subtitle results__action-subtitle--light">Let\'s get started</span></div>';
+
+                const toast = document.getElementById('error-toast');
+                document.getElementById('toast-title').innerText = 'Submission Failed';
+                document.getElementById('toast-message').innerText = 'Could not send your project scope. Please try again.';
+                toast.classList.remove('toast--hidden');
+                setTimeout(() => toast.classList.add('toast--hidden'), 4000);
+            });
         }
 
         function nextStep() {
