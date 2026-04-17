@@ -1,15 +1,15 @@
 .fade-in {
-    animation: fadeIn 0.5s ease-in-out forwards;
+    animation: fadeIn 0.4s ease-in-out forwards;
 }
 
 .pop-in {
-    animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation: popIn 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(var(--space-2));
     }
 
     to {
@@ -21,11 +21,52 @@
 @keyframes popIn {
     from {
         opacity: 0;
-        transform: scale(0.9);
+        transform: scale(0.96);
     }
 
     to {
         opacity: 1;
         transform: scale(1);
+    }
+}
+
+@keyframes celebratePulse {
+    0% {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+
+    35% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.2);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fade-in,
+    .pop-in,
+    .loader,
+    .results__hero--celebrate::before,
+    .results__hero--celebrate::after {
+        animation: none !important;
+    }
+
+    .wizard__progress-bar,
+    .wizard__button,
+    .results__action-button,
+    .results__link,
+    .footer__social-link,
+    .toast,
+    .success-bubble,
+    .feature-list__card,
+    .feature-list__check-icon,
+    .hero__avatar-image,
+    .form-control {
+        transition: none !important;
     }
 }

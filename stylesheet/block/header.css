@@ -1,8 +1,8 @@
 .header {
-    background: #000;
-    color: #fff;
-    padding: 1.5rem 1.5rem 3rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(160deg, var(--color-panel) 0%, var(--color-panel-deep) 100%);
+    color: var(--color-text-inverse);
+    padding: var(--space-3) var(--space-3) var(--space-6);
+    box-shadow: var(--shadow-lg);
     position: relative;
     overflow: hidden;
 }
@@ -12,7 +12,7 @@
     inset: 0;
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    background-size: 32px 32px;
+    background-size: var(--space-4) var(--space-4);
     pointer-events: none;
 }
 
@@ -20,7 +20,7 @@
     position: absolute;
     inset: 0;
     opacity: 0.15;
-    background: radial-gradient(circle at top right, #34d399 0%, transparent 55%);
+    background: radial-gradient(circle at top right, rgba(34, 160, 107, 0.65) 0%, transparent 55%);
     pointer-events: none;
 }
 
@@ -34,7 +34,7 @@
 
 .hero {
     max-width: 80rem;
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-4);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -43,20 +43,20 @@
 .hero__brand {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    font-size: 1.5rem;
+    gap: var(--space-1);
+    font-size: var(--type-1);
     font-weight: 700;
     letter-spacing: -0.02em;
     user-select: none;
 }
 
 .hero__logo {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: var(--space-6);
+    height: var(--space-6);
 }
 
 .hero__accent {
-    color: #10b981;
+    color: var(--color-accent);
 }
 
 .hero__content {
@@ -65,8 +65,8 @@
 }
 
 .hero__title {
-    margin: 0 0 2rem;
-    font-size: 1.875rem;
+    margin: 0 0 var(--space-4);
+    font-size: var(--type-3);
     line-height: 1.1;
     font-weight: 700;
     letter-spacing: -0.02em;
@@ -77,7 +77,7 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: var(--space-3);
     text-align: left;
     align-items: center;
 }
@@ -90,48 +90,49 @@
 .hero__avatar-ring {
     width: 6rem;
     height: 6rem;
-    border-radius: 999px;
-    background: #1f2937;
-    border: 2px solid #10b981;
+    border-radius: var(--radius-pill);
+    background: var(--color-panel-muted);
+    border: 0.125rem solid var(--color-accent);
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 15px rgba(4, 120, 87, 0.4);
+    box-shadow: 0 0 1.5rem rgba(4, 120, 87, 0.28);
 }
 
 .hero__avatar-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: var(--transition-base);
 }
 
-.hero__avatar-ring:hover .hero__avatar-image {
+.hero__avatar-ring:hover .hero__avatar-image,
+.hero__avatar-ring:focus-within .hero__avatar-image {
     transform: scale(1.05);
 }
 
 .hero__card {
     flex: 1;
-    background: rgba(17, 24, 39, 0.5);
-    backdrop-filter: blur(6px);
-    border: 1px solid #1f2937;
-    border-radius: 1rem;
-    padding: 1.5rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    background: rgba(16, 24, 28, 0.56);
+    backdrop-filter: blur(0.5rem);
+    border: 0.0625rem solid rgba(199, 211, 203, 0.18);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    box-shadow: var(--shadow-md);
 }
 
 .hero__text {
     margin: 0;
-    color: #d1d5db;
+    color: rgba(248, 251, 249, 0.84);
     line-height: 1.7;
-    font-size: 1rem;
+    font-size: var(--type-0);
 }
 
 .hero__intro-text {
-    color: #34d399;
+    color: var(--color-accent-soft);
     font-weight: 600;
-    margin-right: 0.25rem;
+    margin-right: var(--space-1);
 }
 
 @media (min-width: 640px) {
@@ -140,8 +141,8 @@
     }
 
     .hero__logo {
-        width: 2.75rem;
-        height: 2.75rem;
+        width: 3.5rem;
+        height: 3.5rem;
     }
 
     .hero__avatar-ring {
@@ -151,21 +152,21 @@
 
     .hero__intro {
         flex-direction: row;
-        gap: 2rem;
+        gap: var(--space-4);
         align-items: center;
     }
 
     .hero__card {
-        padding: 2rem;
+        padding: var(--space-4);
     }
 }
 
 @media (min-width: 768px) {
     .hero__title {
-        font-size: 3rem;
+        font-size: var(--type-4);
     }
 
     .hero__text {
-        font-size: 1.125rem;
+        font-size: var(--type-1);
     }
 }

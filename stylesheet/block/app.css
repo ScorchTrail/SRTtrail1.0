@@ -9,8 +9,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
-    margin-top: -1.5rem;
+    padding: var(--space-2);
+    margin-top: calc(var(--space-3) * -1);
     position: relative;
     z-index: 3;
 }
@@ -33,12 +33,12 @@
 
 @media (min-width: 640px) {
     .app__main {
-        padding: 1.5rem;
+        padding: var(--space-3);
     }
 }
 
 @media (min-width: 1024px) {
     .app__main {
-        padding: 2rem;
+        padding: var(--space-4);
     }
 }

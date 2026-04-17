@@ -176,20 +176,17 @@
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <link rel="shortcut icon" href="./favicon.ico">
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="stylesheet/styles.css">
 </head>
 <body class="app">
 
-    <!-- Success notification bubble -->
-    <div id="success-bubble" class="success-bubble success-bubble--hidden">
+    <aside id="success-bubble" class="success-bubble success-bubble--hidden" role="status" aria-live="polite" aria-atomic="true">
         <span class="success-bubble__icon">✅</span>
         <div class="success-bubble__content">
             <strong class="success-bubble__title">Submission Received!</strong>
             <p class="success-bubble__message">Thank you! I'll be in touch shortly.</p>
         </div>
-    </div>
+    </aside>
 
     <header class="header">
         <div class="header__grid"></div>
@@ -225,63 +222,66 @@
     </header>
 
     <main class="app__main">
-        <div id="wizard-container" class="wizard">
+        <section id="wizard-container" class="wizard" aria-labelledby="step-indicator">
             <div class="wizard__progress-track">
-                <div id="progress-bar" class="wizard__progress-bar"></div>
+                <div id="progress-bar" class="wizard__progress-bar" role="progressbar" aria-label="Discovery form progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25"></div>
             </div>
 
-            <div class="wizard__content">
-                <div id="step-indicator" class="wizard__step-indicator">Step 1 of 4</div>
+            <form id="wizard-form" class="wizard__form">
+                <div class="wizard__content">
+                    <p id="step-indicator" class="wizard__step-indicator">Step 1 of 4</p>
 
-                <div id="content-display" class="fade-in wizard__step-content custom-scrollbar"></div>
-            </div>
+                    <section id="content-display" class="fade-in wizard__step-content custom-scrollbar" aria-live="polite"></section>
+                </div>
 
-            <div class="wizard__actions">
-                <button id="btn-prev" onclick="prevStep()" class="wizard__button wizard__button--secondary u-hidden">
-                    &larr; Back
-                </button>
-                <div class="wizard__actions-spacer"></div>
-                <button id="btn-next" onclick="nextStep()" class="wizard__button wizard__button--primary">
-                    Next Step &rarr;
-                </button>
-            </div>
-        </div>
+                <div class="wizard__actions">
+                    <button id="btn-prev" type="button" class="wizard__button wizard__button--secondary u-hidden">
+                        &larr; Back
+                    </button>
+                    <div class="wizard__actions-spacer"></div>
+                    <button id="btn-next" type="submit" class="wizard__button wizard__button--primary">
+                        Next Step &rarr;
+                    </button>
+                </div>
+            </form>
+        </section>
 
-        <div id="loading-container" class="loading u-hidden">
-            <div class="loader"></div>
-            <h2 class="typography__display loading__title">Calculating your project outline...</h2>
+        <section id="loading-container" class="loading u-hidden" role="status" aria-live="polite" aria-labelledby="loading-title">
+            <div class="loader" aria-hidden="true"></div>
+            <h2 id="loading-title" class="typography__display loading__title">Calculating your project outline...</h2>
             <p class="loading__text">Putting together the pieces of your new digital storefront.</p>
-        </div>
+        </section>
 
-        <div id="results-container" class="results u-hidden">
-            <div class="results__hero">
+        <section id="results-container" class="results u-hidden" aria-labelledby="results-title">
+            <div id="results-hero" class="results__hero">
                 <div class="results__emoji">🎉</div>
-                <h2 class="typography__display results__title">You did it!</h2>
+                <h2 id="results-title" class="typography__display results__title">You did it!</h2>
                 <p class="results__description">
                     Thank you for sharing your business story with me. Based on your answers, here is a visual breakdown of where our focus will be to make your project a success.
                 </p>
             </div>
 
             <div class="results__main">
-                <div class="results__card pop-in">
-                    <h3 class="typography__display results__card-title">Your Custom Project Outline</h3>
-                    <div class="chart-container">
-                        <canvas id="complexityRadar"></canvas>
-                    </div>
-                </div>
+                <figure class="results__card pop-in">
+                    <figcaption>
+                        <h3 id="results-breakdown-title" class="typography__display results__card-title">Your Custom Project Outline</h3>
+                        <p class="results__card-intro">Each focus area shows how much attention your project will likely need during design and build.</p>
+                    </figcaption>
+                    <section id="complexity-breakdown" class="scope-chart" aria-labelledby="results-breakdown-title"></section>
+                </figure>
             </div>
 
             <div class="results__actions">
                 <h3 class="typography__display results__actions-title">Ready to take the next step?</h3>
                 <div class="results__action-buttons">
-                    <button onclick="downloadAnswers()" class="results__action-button results__action-button--secondary">
+                    <button type="button" data-action="download" class="results__action-button results__action-button--secondary">
                         <span class="results__action-icon">📄</span>
                         <div class="results__action-copy">
                             <span class="results__action-title">Save a Copy</span>
                             <span class="results__action-subtitle">Download .txt file</span>
                         </div>
                     </button>
-                    <button onclick="submitFinalToAPI(this)" class="results__action-button results__action-button--primary">
+                    <button type="button" data-action="submit-scope" class="results__action-button results__action-button--primary">
                         <span class="results__action-icon">🚀</span>
                         <div class="results__action-copy">
                             <span class="results__action-title">Submit Project Scope</span>
@@ -291,21 +291,21 @@
                 </div>
 
                 <div class="results__links">
-                    <button onclick="editAnswers()" class="results__link results__link--edit">
+                    <button type="button" data-action="edit" class="results__link results__link--edit">
                         <span>&larr;</span> Go back and edit answers
                     </button>
-                    <button onclick="clearData()" class="results__link results__link--reset">
+                    <button type="button" data-action="reset" class="results__link results__link--reset">
                         <span>↺</span> Start over completely
                     </button>
                 </div>
             </div>
-        </div>
+        </section>
     </main>
 
-    <div id="error-toast" class="toast toast--error toast--hidden">
+    <div id="error-toast" class="toast toast--error toast--hidden" role="alert" aria-live="assertive" aria-atomic="true">
         <span class="toast__icon">⚠️</span>
         <div class="toast__content">
-            <h4 class="toast__title" id="toast-title">Oops!</h4>
+            <p class="toast__title" id="toast-title">Oops!</p>
             <p class="toast__message" id="toast-message">Please fill out the required field we highlighted in red before moving on.</p>
         </div>
     </div>
@@ -331,492 +331,6 @@
         <p class="footer__text">&copy; SRTtrail.dev | Supporting Local Businesses</p>
     </footer>
 
-    <script>
-        const userAnswers = {};
-        let currentStep = 0;
-        let isFinished = false;
-
-        function persistData() {
-            const dataToSave = {
-                answers: userAnswers,
-                step: currentStep,
-                finished: isFinished
-            };
-            localStorage.setItem('srttrail_discovery_data', JSON.stringify(dataToSave));
-        }
-
-        function loadPersistedData() {
-            const saved = localStorage.getItem('srttrail_discovery_data');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    Object.assign(userAnswers, parsed.answers || {});
-                    currentStep = parsed.step || 0;
-                    isFinished = parsed.finished || false;
-                } catch (e) {
-                    console.error('Could not load saved data', e);
-                }
-            }
-        }
-
-        function saveTextInput(id, value) {
-            userAnswers[id] = value;
-            const inputEl = document.getElementById(`input_${id}`);
-            if (inputEl) inputEl.classList.remove('form-control--error');
-            persistData();
-        }
-
-        function handleCheckbox(e, id, value, maxSelect) {
-            if (!userAnswers[id]) userAnswers[id] = [];
-            const isChecked = e.target.checked;
-
-            if (isChecked) {
-                if (maxSelect && userAnswers[id].length >= maxSelect) {
-                    e.target.checked = false;
-
-                    const toast = document.getElementById('error-toast');
-                    document.getElementById('toast-title').innerText = 'Top 5 Reached!';
-                    document.getElementById('toast-message').innerText = `You can only select up to ${maxSelect} core priorities. Please uncheck one to change your selection.`;
-                    toast.classList.remove('toast--hidden');
-                    setTimeout(() => toast.classList.add('toast--hidden'), 4000);
-                    return;
-                }
-                userAnswers[id].push(value);
-            } else {
-                userAnswers[id] = userAnswers[id].filter(v => v !== value);
-            }
-
-            const inputEl = document.getElementById(`input_${id}`);
-            if (inputEl) inputEl.classList.remove('form-control--error');
-            persistData();
-        }
-
-        const pillarData = [
-            {
-                title: "Let's Say Hello",
-                description: "First things first, I'd love to know who I'm talking to and how to best reach you.",
-                questions: [
-                    { id: 'c_name', text: 'Your Full Name', placeholder: 'e.g. Jane Doe', type: 'input', required: true },
-                    { id: 'c_email', text: 'Your Email Address', placeholder: 'e.g. jane@example.com', type: 'input', required: true },
-                    { id: 'c_company', text: 'Your Business Name', placeholder: 'e.g. The Corner Bakery', type: 'input', required: false },
-                    { id: 'c_phone', text: 'Phone Number', placeholder: 'Optional', type: 'input', required: false }
-                ]
-            },
-            {
-                title: 'Your Business Story',
-                description: 'Tell me a little bit about what you do, who you serve, and what you want this website to achieve.',
-                questions: [
-                    { id: 'p1_q1', text: 'What services or products do you offer to the community?', placeholder: 'Describe what you do best...', type: 'textarea', required: true },
-                    { id: 'p1_q2', text: 'Who are your primary local customers?', placeholder: 'e.g. Homeowners, families, college students...', type: 'textarea', required: true },
-                    { id: 'p1_q3', text: 'What is the main goal for this new website?', placeholder: 'e.g. I want people to easily find my menu, book an appointment, call me...', type: 'textarea', required: true }
-                ]
-            },
-            {
-                title: 'Your Top 5 Priorities',
-                description: 'All of my websites come standard with fast load times, mobile responsiveness, smooth functionality, and basic SEO. But to make this project perfect for your business, tell me where you want me to dedicate my *extra* time. <br><br><strong>Select up to 5 core focus areas below:</strong>',
-                questions: [
-                    {
-                        id: 'core_priorities',
-                        type: 'top5_checklist',
-                        required: true,
-                        maxSelect: 5,
-                        options: [
-                            { value: 'visuals', label: '🎨 Custom Branding & Visuals', desc: 'Unique design and a premium look to stand out in the community.' },
-                            { value: 'seo', label: '📍 Local SEO Focus', desc: 'Extra effort on getting found on Google Maps and local search.' },
-                            { value: 'booking', label: '📅 Online Booking / Scheduling', desc: 'Let customers easily book appointments with you 24/7.' },
-                            { value: 'ecommerce', label: '🛍️ E-commerce / Selling', desc: 'Sell products, gift cards, or take deposits directly.' },
-                            { value: 'reviews', label: '⭐ Customer Trust & Reviews', desc: 'Prominently integrate and display your 5-star reputation.' },
-                            { value: 'portfolio', label: '📸 Project Galleries / Menus', desc: 'Beautiful, easy-to-update galleries of your work or offerings.' },
-                            { value: 'portals', label: '🔐 Customer Portals / Login', desc: 'Private areas for your clients to access documents or history.' },
-                            { value: 'contact', label: '✉️ Advanced Quote Forms', desc: 'Custom forms to capture detailed leads before you even pick up the phone.' }
-                        ]
-                    }
-                ]
-            },
-            {
-                title: 'Getting Ready to Launch',
-                description: 'Just a couple of final details so I can understand your timeline and competition.',
-                questions: [
-                    { id: 'p4_q1', text: 'Who are a couple of other local businesses doing what you do?', placeholder: 'This helps me see what we need to beat...', type: 'textarea', required: true },
-                    { id: 'p4_q2', text: 'When would you ideally like this website to be live?', placeholder: 'e.g. Next month, before the holiday rush...', type: 'input', required: true },
-                    { id: 'p4_q3', text: 'Do you already own your domain name (e.g. yourname.com)?', placeholder: 'Yes (where is it?), or No...', type: 'input', required: true }
-                ]
-            }
-        ];
-
-        function renderStep(index) {
-            const data = pillarData[index];
-            const container = document.getElementById('content-display');
-
-            document.getElementById('step-indicator').innerText = `Step ${index + 1} of ${pillarData.length}`;
-            const progressPercent = ((index + 1) / pillarData.length) * 100;
-            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
-
-            document.getElementById('btn-prev').style.display = index === 0 ? 'none' : 'block';
-            const btnNext = document.getElementById('btn-next');
-            if (index === pillarData.length - 1) {
-                btnNext.innerHTML = 'Calculate Scope ✨';
-                btnNext.classList.add('wizard__button--final');
-            } else {
-                btnNext.innerHTML = 'Next Step &rarr;';
-                btnNext.classList.remove('wizard__button--final');
-            }
-
-            container.classList.remove('fade-in');
-            void container.offsetWidth;
-
-            let htmlString = `
-                <h3 class="questionnaire__title typography__display">${data.title}</h3>
-                <p class="questionnaire__description">${data.description}</p>
-                <div class="questionnaire__list">
-            `;
-
-            data.questions.forEach((q) => {
-                const requiredIndicator = q.required ? '<span class="questionnaire__required" title="Required">*</span>' : '<span class="questionnaire__optional">(Optional)</span>';
-
-                htmlString += '<div class="questionnaire__item">';
-
-                if (q.type === 'input' || q.type === 'textarea') {
-                    const savedValue = userAnswers[q.id] || '';
-                    htmlString += `
-                        <label for="input_${q.id}" class="questionnaire__label">
-                            <span class="questionnaire__label-text">${q.text}${requiredIndicator}</span>
-                        </label>
-                    `;
-                    const inputLogic = `oninput="saveTextInput('${q.id}', this.value)"`;
-
-                    if (q.type === 'textarea') {
-                        htmlString += `<textarea id="input_${q.id}" rows="3" class="form-control form-control--textarea custom-scrollbar" placeholder="${q.placeholder}" ${inputLogic}>${savedValue}</textarea>`;
-                    } else {
-                        htmlString += `<input type="text" id="input_${q.id}" class="form-control" placeholder="${q.placeholder}" value="${savedValue}" ${inputLogic}>`;
-                    }
-                } else if (q.type === 'top5_checklist') {
-                    htmlString += `<div id="input_${q.id}" class="feature-list">`;
-                    const selections = userAnswers[q.id] || [];
-
-                    q.options.forEach(opt => {
-                        const isChecked = selections.includes(opt.value);
-                        htmlString += `
-                            <label class="feature-list__option">
-                                <input type="checkbox" value="${opt.value}" class="feature-list__checkbox u-sr-only" onchange="handleCheckbox(event, '${q.id}', this.value, ${q.maxSelect})" ${isChecked ? 'checked' : ''}>
-                                <div class="feature-list__card">
-                                    <div class="feature-list__head">
-                                        <span class="feature-list__title">${opt.label}</span>
-                                        <div class="feature-list__check">
-                                            <svg class="feature-list__check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                                        </div>
-                                    </div>
-                                    <span class="feature-list__description">${opt.desc}</span>
-                                </div>
-                            </label>
-                        `;
-                    });
-                    htmlString += '</div>';
-                }
-
-                htmlString += '</div>';
-            });
-
-            htmlString += '</div>';
-            container.innerHTML = htmlString;
-            container.classList.add('fade-in');
-            container.scrollTop = 0;
-        }
-
-        function validateCurrentStep() {
-            let isValid = true;
-            const currentQuestions = pillarData[currentStep].questions;
-
-            for (let q of currentQuestions) {
-                if (q.required) {
-                    const val = userAnswers[q.id];
-
-                    if (q.type === 'top5_checklist') {
-                        if (!val || val.length === 0) {
-                            showValidationError(q.id, 'Please select at least one core priority for your project.');
-                            isValid = false;
-                            break;
-                        }
-                    } else if (val === undefined || (typeof val === 'string' && val.trim() === '')) {
-                        showValidationError(q.id, 'Please fill out the required field we highlighted in red before moving on.');
-                        isValid = false;
-                        break;
-                    }
-                }
-            }
-            return isValid;
-        }
-
-        function showValidationError(id, message) {
-            const inputEl = document.getElementById(`input_${id}`);
-            if (inputEl) {
-                inputEl.classList.add('form-control--error');
-                inputEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-
-            const toast = document.getElementById('error-toast');
-            document.getElementById('toast-title').innerText = 'Oops!';
-            document.getElementById('toast-message').innerText = message;
-            toast.classList.remove('toast--hidden');
-            setTimeout(() => toast.classList.add('toast--hidden'), 4000);
-        }
-
-        function showSuccessBubble() {
-            const bubble = document.getElementById('success-bubble');
-            bubble.classList.remove('success-bubble--hidden');
-            setTimeout(() => bubble.classList.add('success-bubble--hidden'), 5000);
-        }
-
-        function submitFinalToAPI(btn) {
-            btn.disabled = true;
-            btn.innerHTML = '<span class="results__action-icon">⏳</span><div class="results__action-copy"><span class="results__action-title">Sending...</span></div>';
-
-            const payload = {
-                name: userAnswers.c_name || 'Unknown',
-                email: userAnswers.c_email || 'Unknown',
-                company: userAnswers.c_company || 'Not provided',
-                phone: userAnswers.c_phone || 'Not provided',
-                status: 'Completed Discovery Form',
-                summary: formatAnswers()
-            };
-
-            fetch('https://srttrail-leads.p-vedant7878.workers.dev', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-                keepalive: true
-            })
-            .then(res => {
-                if (res.ok) {
-                    showSuccessBubble();
-                    btn.innerHTML = '<span class="results__action-icon">✅</span><div class="results__action-copy"><span class="results__action-title">Sent!</span></div>';
-                } else {
-                    throw new Error('Server error');
-                }
-            })
-            .catch(() => {
-                btn.disabled = false;
-                btn.innerHTML = '<span class="results__action-icon">🚀</span><div class="results__action-copy"><span class="results__action-title">Submit Project Scope</span><span class="results__action-subtitle results__action-subtitle--light">Let\'s get started</span></div>';
-
-                const toast = document.getElementById('error-toast');
-                document.getElementById('toast-title').innerText = 'Submission Failed';
-                document.getElementById('toast-message').innerText = 'Could not send your project scope. Please try again.';
-                toast.classList.remove('toast--hidden');
-                setTimeout(() => toast.classList.add('toast--hidden'), 4000);
-            });
-        }
-
-        function nextStep() {
-            if (!validateCurrentStep()) return;
-
-            if (currentStep === 0) {
-                const leadData = {
-                    name: userAnswers.c_name || 'Unknown',
-                    email: userAnswers.c_email || 'Unknown',
-                    company: userAnswers.c_company || 'Not provided',
-                    phone: userAnswers.c_phone || 'Not provided',
-                    status: 'Started Discovery Form'
-                };
-
-                fetch('https://srttrail-leads.p-vedant7878.workers.dev', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(leadData),
-                    keepalive: true
-                }).catch((error) => console.error('Error sending early lead:', error));
-            }
-
-            if (currentStep < pillarData.length - 1) {
-                currentStep++;
-                persistData();
-                renderStep(currentStep);
-            } else {
-                finishAndCalculate();
-            }
-        }
-
-        function prevStep() {
-            if (currentStep > 0) {
-                currentStep--;
-                persistData();
-                renderStep(currentStep);
-            }
-        }
-
-        function finishAndCalculate() {
-            isFinished = true;
-            persistData();
-
-            document.getElementById('wizard-container').classList.add('u-hidden');
-
-            const loader = document.getElementById('loading-container');
-            loader.classList.remove('u-hidden');
-
-            setTimeout(() => {
-                loader.classList.add('u-hidden');
-                document.getElementById('results-container').classList.remove('u-hidden');
-                document.getElementById('results-container').classList.add('fade-in');
-
-                renderFinalChart();
-                triggerConfetti();
-            }, 1500);
-        }
-
-        function triggerConfetti() {
-            const duration = 2.5 * 1000;
-            const end = Date.now() + duration;
-
-            (function frame() {
-                confetti({
-                    particleCount: 6,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    colors: ['#047857', '#10b981', '#34d399', '#000000']
-                });
-                confetti({
-                    particleCount: 6,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    colors: ['#047857', '#10b981', '#34d399', '#000000']
-                });
-
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
-            })();
-        }
-
-        function renderFinalChart() {
-            const ctx = document.getElementById('complexityRadar').getContext('2d');
-            let metrics = [20, 20, 20, 20, 20];
-
-            const features = userAnswers.core_priorities || [];
-
-            if (features.includes('visuals')) metrics[0] += 35;
-            if (features.includes('seo')) metrics[3] += 35;
-            if (features.includes('booking')) {
-                metrics[1] += 25;
-                metrics[4] += 15;
-            }
-            if (features.includes('ecommerce')) {
-                metrics[1] += 25;
-                metrics[2] += 15;
-            }
-            if (features.includes('reviews')) metrics[4] += 30;
-            if (features.includes('portfolio')) {
-                metrics[0] += 15;
-                metrics[2] += 20;
-            }
-            if (features.includes('portals')) metrics[1] += 35;
-            if (features.includes('contact')) {
-                metrics[4] += 20;
-                metrics[1] += 10;
-            }
-
-            metrics = metrics.map(v => Math.min(v, 100));
-
-            new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: ['Brand & Visual Design', 'Backend Operations', 'Content & Structure', 'Local SEO Focus', 'Customer Engagement'],
-                    datasets: [{
-                        label: 'Project Focus Area',
-                        data: metrics,
-                        backgroundColor: 'rgba(4, 120, 87, 0.2)',
-                        borderColor: 'rgba(4, 120, 87, 0.8)',
-                        pointBackgroundColor: 'rgba(4, 120, 87, 1)',
-                        pointBorderColor: '#fff',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
-                            grid: { color: 'rgba(0, 0, 0, 0.05)' },
-                            pointLabels: { font: { family: "'Inter', sans-serif", size: 13, weight: '600' }, color: '#374151' },
-                            ticks: { display: false, min: 0, max: 100 }
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { enabled: false }
-                    }
-                }
-            });
-        }
-
-        function formatAnswers() {
-            let output = 'SRTtrail.dev | Discovery Outline\n';
-            output += '========================================\n\n';
-
-            pillarData.forEach((pillar, pIndex) => {
-                output += `--- Step ${pIndex + 1}: ${pillar.title} ---\n\n`;
-                pillar.questions.forEach((q) => {
-                    let answer = userAnswers[q.id];
-                    if (q.type === 'top5_checklist') {
-                        answer = (answer && answer.length > 0) ? answer.join(', ') : 'None selected';
-                    } else {
-                        answer = answer || '[No answer provided]';
-                    }
-                    output += `${q.text || 'Selected Priorities'}:\n> ${answer}\n\n`;
-                });
-            });
-            return output;
-        }
-
-        function downloadAnswers() {
-            const text = formatAnswers();
-            const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'SRTtrail-Discovery-Outline.txt';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        function emailAnswers() {
-            const body = encodeURIComponent(formatAnswers());
-            window.location.href = `mailto:s.trail7878@gmail.com?subject=New Local Business Discovery Submission&body=${body}`;
-        }
-
-        function editAnswers() {
-            isFinished = false;
-            currentStep = pillarData.length - 1;
-            persistData();
-
-            document.getElementById('results-container').classList.add('u-hidden');
-            document.getElementById('results-container').classList.remove('fade-in');
-            document.getElementById('wizard-container').classList.remove('u-hidden');
-
-            renderStep(currentStep);
-        }
-
-        function clearData() {
-            if (confirm('Are you sure you want to start over? All your saved answers will be permanently deleted.')) {
-                localStorage.removeItem('srttrail_discovery_data');
-                location.reload();
-            }
-        }
-
-        loadPersistedData();
-
-        if (isFinished) {
-            document.getElementById('wizard-container').classList.add('u-hidden');
-            document.getElementById('results-container').classList.remove('u-hidden');
-            renderFinalChart();
-        } else {
-            renderStep(currentStep);
-        }
-    </script>
+    <script type="module" src="assets/js/app.js"></script>
 </body>
 </html>

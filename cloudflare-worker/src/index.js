@@ -1,3 +1,16 @@
+function escapeHtml(value = '') {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function sanitizeSubject(value = '') {
+    return String(value).replace(/[\r\n]+/g, ' ').trim();
+}
+
 export default {
     async fetch(request, env) {
         if (request.method === 'OPTIONS') {
@@ -17,6 +30,13 @@ export default {
         try {
             const body = await request.json();
             const { name, email, company, phone, status = 'Started Discovery Form', summary } = body;
+            const subjectName = sanitizeSubject(name || 'Unknown');
+            const safeName = escapeHtml(name);
+            const safeEmail = escapeHtml(email);
+            const safeCompany = escapeHtml(company);
+            const safePhone = escapeHtml(phone);
+            const safeStatus = escapeHtml(status);
+            const safeSummary = summary ? escapeHtml(summary) : '';
 
             const resendResponse = await fetch('https://api.resend.com/emails', {
                 method: 'POST',
@@ -27,18 +47,28 @@ export default {
                 body: JSON.stringify({
                     from: 'SRTtrail Leads <leads@srttrail.dev>',
                     to: 's.trail7878@gmail.com',
-                    subject: `New Lead Started: ${name}`,
+                    subject: `New Lead Started: ${subjectName}`,
                     html: `
                         <h2>New Discovery Form Started</h2>
-                        <p><strong>Status:</strong> ${status}</p>
-                        <p><strong>Name:</strong> ${name}</p>
-                        <p><strong>Email:</strong> ${email}</p>
-                        <p><strong>Phone:</strong> ${phone}</p>
-                        <p><strong>Company:</strong> ${company}</p>
+                        <p><strong>Status:</strong> ${safeStatus}</p>
+                        <p><strong>Name:</strong> ${safeName}</p>
+                        <p><strong>Email:</strong> ${safeEmail}</p>
+                        <p><strong>Phone:</strong> ${safePhone}</p>
+                        <p><strong>Company:</strong> ${safeCompany}</p>
                         <hr>
                         <p><em>The visitor has completed the first step of the discovery form.</em></p>
-                        ${summary ? `<h3>Full Discovery Answers</h3><pre style="white-space:pre-wrap;font-family:monospace;font-size:0.85rem;background:#f3f4f6;padding:1rem;border-radius:0.5rem;">${summary}</pre>` : ''}
-                    `
+                        ${safeSummary ? `<h3>Full Discovery Answers</h3><pre>${safeSummary}</pre>` : ''}
+                    `,
+                    text: [
+                        'New Discovery Form Started',
+                        `Status: ${status}`,
+                        `Name: ${name}`,
+                        `Email: ${email}`,
+                        `Phone: ${phone}`,
+                        `Company: ${company}`,
+                        '',
+                        summary ? `Full Discovery Answers:\n${summary}` : ''
+                    ].filter(Boolean).join('\n')
                 })
             });
 

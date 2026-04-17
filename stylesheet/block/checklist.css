@@ -1,11 +1,11 @@
 .feature-list__checkbox:checked + .feature-list__card {
-    border-color: #065f46;
-    background-color: #ecfdf5;
+    border-color: var(--color-primary-strong);
+    background-color: var(--color-primary-soft);
 }
 
 .feature-list__checkbox:checked + .feature-list__card .feature-list__check {
-    background-color: #047857;
-    border-color: #047857;
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
 }
 
 .feature-list__checkbox:checked + .feature-list__card .feature-list__check-icon {

@@ -1,32 +1,32 @@
 .loading {
-    padding: 4rem;
+    padding: var(--space-7);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
+    gap: var(--space-2);
 }
 
 .loader {
-    border: 4px solid #f3f4f6;
-    border-top: 4px solid #065f46;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    margin-bottom: 1.5rem;
+    border: 0.5rem solid var(--color-surface-muted);
+    border-top: 0.5rem solid var(--color-primary-strong);
+    border-radius: var(--radius-pill);
+    width: 3rem;
+    height: 3rem;
     animation: spin 1s linear infinite;
 }
 
 .loading__title {
     margin: 0;
-    color: #111827;
-    font-size: 1.5rem;
+    color: var(--color-text);
+    font-size: var(--type-2);
     font-weight: 700;
 }
 
 .loading__text {
-    margin-top: 0.5rem;
-    color: #6b7280;
+    margin: 0;
+    color: var(--color-text-muted);
 }
 
 @keyframes spin {

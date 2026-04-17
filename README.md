@@ -8,7 +8,7 @@ An interactive, client-facing web application designed to help local businesses 
 
 - Top 5 Priorities Logic: A custom checklist that limits users to selecting their top 5 core features, forcing them to prioritize what matters most.
 
-- Dynamic Scope Visualization: Uses Chart.js to generate a beautiful, personalized Radar Chart based on the exact features and tiers the user selects.
+- Dynamic Scope Visualization: Uses native progress-meter UI to generate an accessible, personalized breakdown of the project's major focus areas.
 
 - Auto-Save Progress: Utilizes browser localStorage to save user input on every keystroke. Clients can close the tab and return later without losing their progress.
 
@@ -16,7 +16,7 @@ An interactive, client-facing web application designed to help local businesses 
 
 - Instant Export & Submission: Users can instantly download their finalized answers as a cleanly formatted .txt file or forward them directly to your email using native mailto: integration.
 
-- Celebration UI: Confetti burst animation upon successful completion!
+- Celebration UI: Built-in celebratory motion on successful completion without third-party dependencies.
 
 ### 🛠️ Tech Stack
 
@@ -28,9 +28,7 @@ This project is built to be ultra-lightweight and serverless. There are no build
 
 - Modular CSS3 (BEM architecture in `stylesheet/block/`)
 
-- Chart.js (Loaded via CDN for the radar chart visualization)
-
-- Canvas Confetti (Loaded via CDN for the celebration effect)
+- Vanilla JavaScript module for rendering the focus breakdown and celebration motion
 
 - Cloudflare Worker + Resend (early lead email capture)
 
